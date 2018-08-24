@@ -144,7 +144,6 @@ type Config struct {
 
 	// Authentication with the VM via SSH
 	sshAuthorizedKey string
-	sshPrivateKey    string
 
 	// Authentication with the VM via WinRM
 	winrmCertificate string
@@ -330,7 +329,7 @@ func setSshValues(c *Config) error {
 			publicKey.Type(),
 			base64.StdEncoding.EncodeToString(publicKey.Marshal()),
 			time.Now().Format(time.RFC3339))
-		c.sshPrivateKey = string(privateKeyBytes)
+		c.Comm.SSHPrivateKey = privateKeyBytes
 
 	} else {
 		sshKeyPair, err := NewOpenSshKeyPair()
@@ -339,7 +338,7 @@ func setSshValues(c *Config) error {
 		}
 
 		c.sshAuthorizedKey = sshKeyPair.AuthorizedKey()
-		c.sshPrivateKey = sshKeyPair.PrivateKey()
+		c.Comm.SSHPrivateKey = sshKeyPair.PrivateKey()
 	}
 
 	return nil
